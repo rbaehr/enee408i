@@ -22,7 +22,7 @@ void loop() {
 
   // update the pot adjustments
   sys.updateAdjustments();
-/*
+
   long inch_left = sys.ping_driver_left.getPing();
   long inch_right = sys.ping_driver_right.getPing();
   long inch_mid = sys.ping_driver_mid.getPing();
@@ -56,9 +56,7 @@ void loop() {
       delay(TURN_DELAY);
     }  
   }
-  
-*/
-  
+   
   delay(100);
   
     //forward(SPEED_LOW);
