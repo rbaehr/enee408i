@@ -18,6 +18,11 @@ namespace DataStructures {
     unsigned char PING2;
   } PingPins;
 
+  typedef struct PotPins {
+    unsigned char POT_LEFT;
+    unsigned char POT_RIGHT;
+  } PotPins;
+
 }
 
 #endif

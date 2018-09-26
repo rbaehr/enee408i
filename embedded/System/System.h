@@ -3,12 +3,20 @@
 
 #include "Arduino.h"
 #include "MotorControllerDriver.h"
+#include "PingDriver.h"
+
+#define ADJUST_MIN -25
+#define ADJUST_MAX 25
 
 class System {
 
  public:
 
   System();
+
+  PingDriver ping_driver_left = PingDriver(6);
+  PingDriver ping_driver_right = PingDriver(13);
+  PingDriver ping_driver_mid = PingDriver(10);
 
   void updateAdjustments();
 
@@ -19,8 +27,12 @@ class System {
 
  private:
 
+  int pot_left;
+  int pot_right;
 
+  DataStructures::PotPins pot_pins;
   MotorControllerDriver mc_driver;
+
 
 };
 
