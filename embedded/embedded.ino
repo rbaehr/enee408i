@@ -23,41 +23,53 @@ void loop() {
   // update the pot adjustments
   sys.updateAdjustments();
 
-  long inch_left = sys.ping_driver_left.getPing();
-  long inch_right = sys.ping_driver_right.getPing();
-  long inch_mid = sys.ping_driver_mid.getPing();
 
-  if ( inch_left > DIST_TURN_THRESH && inch_right > DIST_TURN_THRESH && inch_mid > DIST_MID_THRESH ) {
-    sys.forward(SPEED_LOW); 
+  int command = 0;
+
+  if ( Serial.available() ) {
+    command = Serial.read();
   }
-  else if ( inch_mid <= DIST_MID_THRESH ) {
-    if ( inch_left < inch_right ) {
-      sys.right(SPEED_LOW);
+
+  if ( command == 1 ) {
+
+    int left_speed = 0;
+    int right_speed = 0;
+
+
+    if ( Serial.available() ) {
+      left_speed = Serial.read();
+    }
+    if ( Serial.available() ) {
+      right_speed = Serial.read();
+    }
+
+    PRINTLN("%d, %d", left_speed, right_speed);
+
+    if ( left_speed >= 0 ) {
+      sys.mc_driver.ccwLeft(left_speed);
     }
     else {
-      sys.left(SPEED_LOW);
+      sys.mc_driver.cwLeft(-1*left_speed);
     }
-  }
-  else if ( inch_left > DIST_TURN_THRESH && inch_right <= DIST_TURN_THRESH ) {
-    sys.left(SPEED_LOW);
-    delay(TURN_DELAY);
-  }
-  else if ( inch_left <= DIST_TURN_THRESH && inch_right > DIST_TURN_THRESH ) {
-    sys.right(SPEED_LOW);
-    delay(TURN_DELAY);
-  }
-  else {
-    if ( inch_left < inch_right ) {
-      sys.right(SPEED_LOW);
-      delay(TURN_DELAY);
+    if ( right_speed >= 0 ) {
+      sys.mc_driver.ccwRight(right_speed);
     }
     else {
-      sys.left(SPEED_LOW);
-      delay(TURN_DELAY);
-    }  
+      sys.mc_driver.cwRight(-1*right_speed);
+    }
   }
-   
-  delay(100);
-  
+
+  else if ( command == 255 ) {
+
+    long dist_left = sys.ping_driver_left.getPing();
+    long dist_right = sys.ping_driver_right.getPing();
+    long dist_mid = sys.ping_driver_right.getPing();
+
+    Serial.write(dist_left);
+    Serial.write(dist_right);
+    Serial.write(dist_mid); 
+  }
+
+  delay(10); 
     //forward(SPEED_LOW);
 }
