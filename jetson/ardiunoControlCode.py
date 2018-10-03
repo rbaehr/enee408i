@@ -4,6 +4,7 @@
 # have to send data over serial, right?
 
 # need to include MATH and PYSERIAL
+import math, pyserial
 
 def movement_control(size, position):
 # check for the position
