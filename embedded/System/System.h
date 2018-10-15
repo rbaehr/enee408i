@@ -14,6 +14,7 @@ class System {
 
   System();
 
+  MotorControllerDriver mc_driver;
   PingDriver ping_driver_left = PingDriver(6);
   PingDriver ping_driver_right = PingDriver(13);
   PingDriver ping_driver_mid = PingDriver(10);
@@ -31,7 +32,6 @@ class System {
   int pot_right;
 
   DataStructures::PotPins pot_pins;
-  MotorControllerDriver mc_driver;
 
 
 };
