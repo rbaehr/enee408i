@@ -57,12 +57,12 @@ class Vision:
             #self.pts.appendleft(center)
             
 	    if center is None:
-	        continue
+	        center = (0, 0)
 	    #print(center)
             left, right = self.lr_controller.control(center[0])
 	    print(left, right)
-            #self.command.left(left)
-            ##self.command.right(right)
+            self.command.left(left)
+            self.command.right(right)
 
 
 
