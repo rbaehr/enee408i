@@ -54,23 +54,23 @@ class Vision:
                             cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
 
-            if center is None:
-                #center = (0, 0)
-                continue
-            pts.append(center)
-            #print(center)
+                if center is None:
+                    #center = (0, 0)
+                    continue
+                pts.append(center)
+                #print(center)
 
-        pos = 0
-        for i in xrange(self.moving_average):
-            pos += i[0]
+            pos = 0
+            for i in xrange(self.moving_average):
+                pos += i[0]
 
-        pos /= self.moving_average
-        pos = int(pos)
+            pos /= self.moving_average
+            pos = int(pos)
 
-        left, right = self.lr_controller.control(pos)
-        print(left, right)
-        self.command.left(left)
-        self.command.right(right)
+            left, right = self.lr_controller.control(pos)
+            print(left, right)
+            self.command.left(left)
+            self.command.right(right)
 
 
 
