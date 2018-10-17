@@ -2,7 +2,7 @@ import serial, struct, time
 
 class Command:
 
-    def __init__(self, serial_port='/dev/ttyACM2', baud_rate=9600):
+    def __init__(self, serial_port='/dev/ttyACM0', baud_rate=9600):
         self.ser = serial.Serial(serial_port, baud_rate)
         self.ser.flushInput()
         self.ser.flushOutput()

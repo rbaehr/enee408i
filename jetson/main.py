@@ -1,13 +1,14 @@
 from controller import Controller
 from left_right_controller import LeftRightController
 from command import Command
+from vision import Vision
 
 def main():
-    c = Controller(1)
-    c1 = LeftRightController(2)
+    c = LeftRightController(300)
+    command = Command(serial_port='/dev/ttyACM1')
+    vision = Vision(command, c, None)
 
-    print(c.p)
-    print(c1.p)
+    vision.loop()
 
 
 if __name__ == '__main__':

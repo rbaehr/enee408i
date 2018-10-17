@@ -75,7 +75,9 @@ while True:
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
 	# update the points queue
+	print(center)
 	pts.appendleft(center)
+	
 
 	# loop over the set of tracked points
 	for i in xrange(1, len(pts)):

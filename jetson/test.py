@@ -1,14 +1,18 @@
-import numpy as np
-import cv2
+import serial
+import struct
 
-cap = cv2.VideoCapture(1)
- 
-while(True):
-    ret, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_XYZ2BGR)
-    cv2.imshow('frame',gray)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
 
-cap.release()
-cv2.destroyAllWindows()
+ser = serial.Serial('/dev/ttyACM0', 9600)
+
+ser.close()
+ser.open()
+
+left = struct.pack('>h', -1)
+right = struct.pack('>h', -1)
+
+ser.write(left)
+ser.write(right)
+a = ser.readline()
+b = ser.readline()
+
+print(a, b)
