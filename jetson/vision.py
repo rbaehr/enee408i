@@ -62,7 +62,7 @@ class Vision:
 
             pos = 0
             for i in xrange(self.moving_average):
-                pos += pts.pop()
+                pos += pts.pop()[0]
 
             pos /= self.moving_average
             pos = int(pos)
