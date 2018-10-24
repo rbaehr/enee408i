@@ -1,18 +1,17 @@
-from controller import Controller
+class LeftRightController:
 
-class LeftRightController(Controller):
-
-    def __init__(self, reference, min_threshold=-50, max_threshold=50):
+    def __init__(self, reference, p, min_threshold=-50, max_threshold=50):
         self.reference = reference
         self.min_threshold = min_threshold
         self.max_threshold = max_threshold
+	self.p = p
 
 
     def control(self, point):
         error = self.reference - point
 
-        right_command = error
-        left_command = -1*error
+        right_command = int(self.p*error)
+        left_command = int(-1*self.p*error)
 
         if left_command < self.min_threshold:
             left_command = 0

@@ -24,6 +24,7 @@ class Vision:
 
     def loop(self):
         pts = []
+	radi = []
         while True:
             for i in xrange(self.moving_average):
                 (grabbed, frame) = self.camera.read()
@@ -58,17 +59,26 @@ class Vision:
                     #center = (0, 0)
                     continue
                 pts.append(center)
+		radi.append(radius)
                 #print(center)
 
-            pos = 0
+	    len_pts = len(pts)
+	    len_radi = len(radi)
+            pts_avg = 0
+	    r_avg = 0
             for _ in pts:
-                pos += pts.pop()[0]
+                pts_avg += pts.pop()[0]
+	
+	    for _ in radi:
+		r_avg += radi.pop()
 
-            pos /= self.moving_average
-            pos = int(pos)
+            pts_avg /= len_pts
+            pts_avg = int(pts_avg)
+	    r_avg /= len_radi
+	    r_avg = int(r_avg)
 
-            left, right = self.lr_controller.control(pos)
-            print(left, right)
+            left, right = self.lr_controller.control(pts_avg)
+            print(left, right, radius)
             self.command.left(left)
             self.command.right(right)
 

@@ -2,8 +2,9 @@ from controller import Controller
 
 class ForwardBackController(Controller):
 
-    def __init__(self, center_x, min_threshold=-7, max_threshold=8):
-        self.center_x = center_x
+    def __init__(self, reference, p, min_threshold=-25, max_threshold=25):
+        self.reference = reference
+	self.p = p
         self.min_threshold = min_threshold
         self.max_threshold = max_threshold
 
@@ -11,8 +12,8 @@ class ForwardBackController(Controller):
     def control(self, radius):
         error = self.reference - radius
 
-        right_command = p*error
-        left_command = p*error
+        right_command = self.p*error
+        left_command = self.p*error
 
         if left_command < self.min_threshold:
             left_command = 0
