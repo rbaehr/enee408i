@@ -23,62 +23,69 @@ class Vision:
 	self.camera = cv2.VideoCapture(camera_index)
 
     def loop(self):
-        pts = []
-	radi = []
+        pts = deque()
+        pts_sum = 0
+        radi = deque()
+        radi_sum = 0
+
         while True:
-            for i in xrange(self.moving_average):
-                (grabbed, frame) = self.camera.read()
+            (grabbed, frame) = self.camera.read()
 
-                frame = imutils.resize(frame, width=600)
-                blurred = cv2.GaussianBlur(frame, (11, 11), 0)
-                hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            frame = imutils.resize(frame, width=600)
+            blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-                mask = cv2.inRange(hsv, self.greenLower, self.greenUpper)
-                mask = cv2.erode(mask, None, iterations=2)
-                mask = cv2.dilate(mask, None, iterations=2)
+            mask = cv2.inRange(hsv, self.greenLower, self.greenUpper)
+            mask = cv2.erode(mask, None, iterations=2)
+            mask = cv2.dilate(mask, None, iterations=2)
 
-                cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)[-2]
-                center = None
+            cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
+                                cv2.CHAIN_APPROX_SIMPLE)[-2]
+            center = None
 
-                if len(cnts) > 0:
-                    c = max(cnts, key=cv2.contourArea)
-                    ((x, y), radius) = cv2.minEnclosingCircle(c)
-                    M = cv2.moments(c)
-                    center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            if len(cnts) > 0:
+                c = max(cnts, key=cv2.contourArea)
+                ((x, y), radius) = cv2.minEnclosingCircle(c)
+                M = cv2.moments(c)
+                center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
-                    if radius > 10:
-                            # draw the circle and centroid on the frame,
-                            # then update the list of tracked points
-                            cv2.circle(frame, (int(x), int(y)), int(radius),
-                                    (0, 255, 255), 2)
-                            cv2.circle(frame, center, 5, (0, 0, 255), -1)
+                if radius > 10:
+                        # draw the circle and centroid on the frame,
+                        # then update the list of tracked points
+                        cv2.circle(frame, (int(x), int(y)), int(radius),
+                                (0, 255, 255), 2)
+                        cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
 
-                if center is None:
-                    #center = (0, 0)
-                    continue
-                pts.append(center)
-		radi.append(radius)
-                #print(center)
+            if center is None:
+                #center = (0, 0)
+                continue
+            # if enough points, enqueue and dequeu and adjust sum
+            if len(pts) == self.moving_average:
+                pts.appendleft(center[0])
+                pts_sum -= pts.pop()
+                pts_sum += center[0]
+            else:
+                pts.appendleft(center[0])
+                pts_sum += center[0]
 
-	    len_pts = len(pts)
-	    len_radi = len(radi)
-            pts_avg = 0
-	    r_avg = 0
-            for _ in pts:
-                pts_avg += pts.pop()[0]
-	
-	    for _ in radi:
-		r_avg += radi.pop()
+            if len(radi) == self.moving_average:
+                radi.appendleft(radius)
+                radi_sum -= radi.pop()
+                radi_sum += radius
+            else:
+                radi.appendleft(radius)
+                radi_sum += radius
 
-            pts_avg /= len_pts
-            pts_avg = int(pts_avg)
-	    r_avg /= len_radi
-	    r_avg = int(r_avg)
+            pts_avg = int(pts_sum/len(pts))
+            radi_avg = int(radi_sum/len(radi))
 
-            left, right = self.lr_controller.control(pts_avg)
-            print(left, right, radius)
+            l1, r1 = self.lr_controller.control(pts_avg)
+            l2, r2 = self.fb_controller.control(radi_avg)
+
+            left = l1 + l2
+            right = l2 + r2
+
             self.command.left(left)
             self.command.right(right)
 
