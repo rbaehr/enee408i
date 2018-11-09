@@ -2,6 +2,7 @@ from collections import deque
 import numpy as np
 import imutils
 import cv2
+import json
 
 # code that does vision processing
 class Vision:
@@ -9,7 +10,7 @@ class Vision:
     # takes an arbitrary amount of controllers, which will be set off here in the
     # vision processing loop
     def __init__(self, commander, left_right_controller, forward_back_controller,
-                 camera_index=1, moving_average=10):
+                 camera_index=1, moving_average=10, face_config='config/faces.json'):
         self.command = commander
         self.moving_average = moving_average
         self.lr_controller = left_right_controller
@@ -20,9 +21,25 @@ class Vision:
         self.greenUpper = (64, 255, 255)
 
         # if a video path was not supplied, use the webcam
-	self.camera = cv2.VideoCapture(camera_index)
+        self.camera = cv2.VideoCapture(camera_index)
 
-    def loop(self):
+        self.known_faces = []
+        self.known_names = []
+
+        with open(face_config) as f:
+            face_config = json.load(f)
+
+        for i in face_config:
+            image = face_recognition.load_image_file(face_config[i])
+            self.known_names.append(i)
+            self.known_faces.append(face_recognition.face_encodings(image)[0])
+
+
+    # returns the name of the person recognized
+    def recognize(self):
+        pass
+
+    def follow_ball(self):
         pts = deque()
         pts_sum = 0
         radi = deque()
