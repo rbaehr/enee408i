@@ -1,3 +1,7 @@
 welcome: Robot ready.
 
-recognize: You are {{name}}.
+recognize_none: I see no one.
+
+recognize_one: You are {{name}}.
+
+recognize_many: I see.

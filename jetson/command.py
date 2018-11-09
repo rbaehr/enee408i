@@ -3,9 +3,12 @@ import serial, struct, time
 class Command:
 
     def __init__(self, serial_port='/dev/ttyACM0', baud_rate=9600):
-        self.ser = serial.Serial(serial_port, baud_rate)
-        self.ser.flushInput()
-        self.ser.flushOutput()
+        try:
+            self.ser = serial.Serial(serial_port, baud_rate)
+            self.ser.flushInput()
+            self.ser.flushOutput()
+        except:
+            pass
 
         self.LEFT_CW_CMD = 0x01
         self.LEFT_CCW_CMD = 0x02
@@ -35,7 +38,6 @@ class Command:
         self.write_command(self.PING_CMD, 0)
 
         dist = []
-        
         for i in xrange(3):
             dist.append(int(self.ser.readline().strip()))
 

@@ -1,4 +1,4 @@
 {
-    "Ross" : "config/faces/ross.jpg",
-    "Anwaar" : "config/faces/anwaar.jpg"
+    "Ross" : "../config/faces/ross.jpg",
+    "Anwaar" : "../config/faces/anwaar.jpg"
 }
