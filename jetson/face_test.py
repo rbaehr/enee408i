@@ -4,8 +4,8 @@ import json
 
 class Test:
 
-    def __init__(self, face_config='config/faces.json'):
-        self.camera = cv2.VideoCapture(0)
+    def __init__(self, face_config='./config/faces_test.json'):
+        self.camera = cv2.VideoCapture(1)
 
         self.known_faces = []
         self.known_names = []
@@ -21,9 +21,9 @@ class Test:
 
         # returns the name of the person recognized
     def recognize(self, max_frames=30):
-        process_this_frame = True
 
         people = set()
+	process_this_frame = True
 
         for i in xrange(max_frames):
             ret, frame = self.camera.read()
@@ -60,12 +60,12 @@ class Test:
 
                     people = people.union(set(face_names))
 
-            process_this_frame = not process_this_frame
+            #process_this_frame = not process_this_frame
 
         return people
 
 
-    def live_recognize(self):
+    def live(self):
         face_locations = []
         face_encodings = []
         face_names = []
@@ -131,6 +131,7 @@ class Test:
         cv2.destroyAllWindows()
 
 a = Test()
-x = a.recognize()
 
+x = a.recognize()
+#x = a.live()
 print(x)
