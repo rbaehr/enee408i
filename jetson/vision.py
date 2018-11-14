@@ -1,6 +1,6 @@
 from collections import deque
 import numpy as np
-import imutils
+#import imutils
 import cv2
 import face_recognition
 import json
@@ -16,13 +16,13 @@ class Vision:
         self.moving_average = moving_average
         self.lr_controller = left_right_controller
         self.fb_controller = forward_back_controller
+	self.camera_index = camera_index
 
         # lower and upper boundaries of the "green" in HSV
         self.greenLower = (29, 86, 6)
         self.greenUpper = (64, 255, 255)
 
         # if a video path was not supplied, use the webcam
-        self.camera = cv2.VideoCapture(camera_index)
 
         self.known_faces = []
         self.known_names = []
@@ -42,6 +42,7 @@ class Vision:
         #process_this_frame = True
 
         people = set()
+        self.camera = cv2.VideoCapture(self.camera_index)
 
         for i in xrange(max_frames):
             ret, frame = self.camera.read()
@@ -79,7 +80,7 @@ class Vision:
 
         self.camera.release()
 
-        return people
+        return list(people)
 
     def follow_ball(self):
         pts = deque()
