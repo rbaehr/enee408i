@@ -39,7 +39,7 @@ class Vision:
 
     # returns the name of the person recognized
     def recognize(self, max_frames=30):
-        process_this_frame = True
+        #process_this_frame = True
 
         people = set()
 
@@ -54,28 +54,28 @@ class Vision:
             rgb_small_frame = small_frame[:, :, ::-1]
 
             # Only process every other frame of video to save time
-            if process_this_frame:
+            #if process_this_frame:
                 # Find all the faces and face encodings in the current frame of video
-                face_locations = face_recognition.face_locations(rgb_small_frame)
-                face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+            face_locations = face_recognition.face_locations(rgb_small_frame)
+            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
-                face_names = []
-                for face_encoding in face_encodings:
-                    # See if the face is a match for the known face(s)
-                    matches = face_recognition.compare_faces(self.known_faces, face_encoding)
-                    name = "Unknown"
+            face_names = []
+            for face_encoding in face_encodings:
+                # See if the face is a match for the known face(s)
+                matches = face_recognition.compare_faces(self.known_faces, face_encoding)
+                name = "Unknown"
 
-                    # If a match was found in known_face_encodings, just use the first one.
-                    if True in matches:
-                        first_match_index = matches.index(True)
-                        name = self.known_names[first_match_index]
+                # If a match was found in known_face_encodings, just use the first one.
+                if True in matches:
+                    first_match_index = matches.index(True)
+                    name = self.known_names[first_match_index]
 
-                    if name != "Unknown":
-                        face_names.append(name)
+                if name != "Unknown":
+                    face_names.append(name)
 
-                    people = people.union(set(face_names))
+                people = people.union(set(face_names))
 
-            process_this_frame = not process_this_frame
+            #process_this_frame = not process_this_frame
 
         self.camera.release()
 
