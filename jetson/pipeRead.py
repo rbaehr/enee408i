@@ -2,9 +2,9 @@ import os
 import errno
 
 
-class pipe:
+class piper:
 
-    FIFO='mypipe'
+    FIFO='mypiper'
 
     try:
         os.mkfifo(FIFO)
@@ -21,4 +21,7 @@ class pipe:
                 if len(data) == 0:
                     print("Writer closed")
                     break
+                #handle data here
+                #Dispense function passing person data
+                #Currently printing recognized person name
                 print('Read: "{0}"'.format(data))
