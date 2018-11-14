@@ -4,4 +4,6 @@ recognize_none: I see no one.
 
 recognize_one: You are {{name}}.
 
-recognize_many: I see.
+recognize_two: I see {{name1}} and {{name2}}.
+
+recognize_many: I see {{names|join(", ")}} and {{final}}.

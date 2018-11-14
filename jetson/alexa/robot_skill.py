@@ -11,10 +11,10 @@ from forward_back_controller import ForwardBackController
 from command import Command
 from vision import Vision
 
-c1 = LeftRightController(300, 0.25)
-c2 = ForwardBackController(40, 0.2)
-command = Command(serial_port='/dev/ttyACM0')
-vision = Vision(command, c1, c2, camera_index=0)
+#c1 = LeftRightController(300, 0.25)
+#c2 = ForwardBackController(40, 0.2)
+#command = Command(serial_port='/dev/ttyACM0')
+#vision = Vision(command, c1, c2, camera_index=0)
 
 app = Flask(__name__)
 ask = Ask(app, "/")
@@ -29,13 +29,18 @@ def new_game():
 @ask.intent("Recognize")
 def recognize():
 
-    name = vision.recognize()
-    if len(name) == 0:
+    #names = vision.recognize()
+    names = ['Ross', 'Joseph']
+    lst = list(names)
+
+    if len(lst) == 0:
         recognize_msg = render_template('recognize_none')
-    if len(name) == 1:
-        recognize_msg = render_template('recognize_one', name=name)
+    elif len(lst) == 1:
+        recognize_msg = render_template('recognize_one', name=lst[0])
+    elif len(lst) == 2:
+        recognize_msg = render_template('recognize_two', name1=lst[0], name2=lst[1])
     else:
-        pass
+        recognize_msg = render_template('recognize_many', names=lst[1:], final=lst[0])
 
     return question(recognize_msg)
 
