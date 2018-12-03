@@ -1,10 +1,10 @@
-import serial, struct, time, socket
+import serial, struct, time, socket, threading
 
 PORT = 9001
 
 class Command:
 
-    def __init__(self, serial_port='/dev/ttyACM0', baud_rate=9600):
+    def __init__(self, serial_port='/dev/ttyACM0', baud_rate=9600, hostname='../config/hostname'):
         try:
             self.ser = serial.Serial(serial_port, baud_rate)
             self.ser.flushInput()
@@ -18,17 +18,22 @@ class Command:
         self.RIGHT_CCW_CMD = 0x08
         self.PING_CMD = 0xF0
 
-        with open('config/hostname', 'r') as f:
+        with open(hostname, 'r') as f:
             for i in f:
-                hostname = str(i)
+                host = str(i)
 
         self.s = socket.socket()
-        self.s.connect((hostname, PORT))
+        self.s.connect((host, PORT))
 
 
     def dispense_pill(self):
+	threading.Thread(target=self._dispense_pill, args=(self.s,)).start()
+
+    def _dispense_pill(self, s):
+	print('dispensing')
         for _ in range(6):
-            self.s.send('go'.encode('utf-8'))
+            s.send('go'.encode('utf-8'))
+	    print('loop')
             time.sleep(2)
 
 

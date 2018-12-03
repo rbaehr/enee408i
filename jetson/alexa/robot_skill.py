@@ -70,10 +70,7 @@ def turn(direction):
 
 @ask.intent("Dispense")
 def dispense():
-    t = threading.Thread(target=command.dispense_pill)
-    t.daemon = True
-    t.start
-    #command.dispense_pill()
+    command.dispense_pill()
     dispense_msg = render_template('dispense')
     return question(dispense_msg)
 
