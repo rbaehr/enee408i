@@ -43,6 +43,43 @@ def recognize():
 
     return question(recognize_msg)
 
+@ask.intent("Chase")
+def chase():
+    welcome_msg = render_template('welcome')
+    return question(welcome_msg)
+
+@ask.intent("Forward")
+def forward():
+    welcome_msg = render_template('welcome')
+    return question(welcome_msg)
+
+
+@ask.intent("Backward")
+def backward():
+    welcome_msg = render_template('welcome')
+    return question(welcome_msg)
+
+
+
+@ask.intent("Turn")
+def turn(direction):
+    welcome_msg = render_template('welcome')
+    return question(welcome_msg)
+
+
+@ask.intent("Dispense")
+def dispense():
+    command.dispense_pill() 
+    dispense_msg = render_template('dispense')
+    return question(dispense_msg)
+
+
+@ask.intent("AMAZON.FallbackIntent")
+def fallback():
+    
+    fallback_msg = render_template('fallback')
+    return question(fallback_msg)
+
 if __name__ == '__main__':
 
     app.run(debug=True)
