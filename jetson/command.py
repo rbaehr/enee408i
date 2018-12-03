@@ -20,20 +20,19 @@ class Command:
 
         with open(hostname, 'r') as f:
             for i in f:
-                host = str(i)
-
-        self.s = socket.socket()
-        self.s.connect((host, PORT))
+                self.host = str(i)
 
 
     def dispense_pill(self):
-	threading.Thread(target=self._dispense_pill, args=(self.s,)).start()
+        threading.Thread(target=self._dispense_pill, args=(self.host,)).start()
 
-    def _dispense_pill(self, s):
-	print('dispensing')
+    def _dispense_pill(self, host):
+        s = socket.socket()
+        s.connect((host, PORT))
+        print('dispensing')
         for _ in range(6):
             s.send('go'.encode('utf-8'))
-	    print('loop')
+            print('loop')
             time.sleep(2)
 
 
