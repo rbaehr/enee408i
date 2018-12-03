@@ -1,4 +1,5 @@
 import logging
+import threading
 import sys
 sys.path.append('..')
 from random import randint
@@ -69,14 +70,16 @@ def turn(direction):
 
 @ask.intent("Dispense")
 def dispense():
-    command.dispense_pill() 
+    t = threading.Thread(target=command.dispense_pill)
+    t.daemon = True
+    t.start
+    #command.dispense_pill()
     dispense_msg = render_template('dispense')
     return question(dispense_msg)
 
 
 @ask.intent("AMAZON.FallbackIntent")
 def fallback():
-    
     fallback_msg = render_template('fallback')
     return question(fallback_msg)
 
