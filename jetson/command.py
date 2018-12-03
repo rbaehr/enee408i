@@ -1,4 +1,6 @@
-import serial, struct, time
+import serial, struct, time, socket
+
+PORT = 9001
 
 class Command:
 
@@ -15,6 +17,17 @@ class Command:
         self.RIGHT_CW_CMD = 0x04
         self.RIGHT_CCW_CMD = 0x08
         self.PING_CMD = 0xF0
+
+        with open('config/hostname', 'r') as f:
+            for i in f:
+                hostname = str(i)
+
+        self.s = socket.socket()
+        self.s.connect((hostname, PORT))
+
+
+    def dispense_pill(self):
+        self.s.send('go'.encode('utf-8'))
 
 
     def write_command(self, opcode, operand):
