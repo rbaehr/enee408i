@@ -48,6 +48,8 @@ def recognize():
 
 @ask.intent("Chase")
 def chase():
+
+    vision.follow_ball()
     welcome_msg = render_template('welcome')
     return question(welcome_msg)
 
