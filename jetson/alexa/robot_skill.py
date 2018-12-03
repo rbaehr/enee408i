@@ -53,7 +53,7 @@ def chase():
 
 @ask.intent("Forward")
 def forward():
-    command.forward(10)
+    command.forward(35)
     time.sleep(2)
     command.stop()
     welcome_msg = render_template('welcome')
@@ -62,7 +62,7 @@ def forward():
 
 @ask.intent("Backward")
 def backward():
-    command.backward(10)
+    command.backward(35)
     time.sleep(2)
     command.stop()
     welcome_msg = render_template('welcome')
@@ -74,9 +74,9 @@ def backward():
 def turn(direction):
     d = str(direction).lower()
     if d == 'left':
-        command.turn_left(5)
+        command.turn_left(25)
     elif d == 'right':
-        command.turn_right(5)
+        command.turn_right(25)
 
     time.sleep(1)
     command.stop()
