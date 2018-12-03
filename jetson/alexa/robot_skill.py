@@ -56,7 +56,7 @@ def forward():
     command.forward(45)
     time.sleep(3)
     command.stop()
-    welcome_msg = render_template('welcome')
+    welcome_msg = render_template('direction')
     return question(welcome_msg)
 
 
@@ -65,7 +65,7 @@ def backward():
     command.backward(45)
     time.sleep(3)
     command.stop()
-    welcome_msg = render_template('welcome')
+    welcome_msg = render_template('direction')
     return question(welcome_msg)
 
 
@@ -74,13 +74,13 @@ def backward():
 def turn(direction):
     d = str(direction).lower()
     if d == 'left':
-        command.turn_left(25)
+        command.turn_left(35)
     elif d == 'right':
-        command.turn_right(25)
+        command.turn_right(35)
 
     time.sleep(2)
     command.stop()
-    welcome_msg = render_template('welcome')
+    welcome_msg = render_template('direction')
     return question(welcome_msg)
 
 def dispense_pill():
