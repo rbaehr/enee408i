@@ -1,5 +1,5 @@
 import logging
-import threading
+import threading, time, socket
 import sys
 sys.path.append('..')
 from random import randint
@@ -67,10 +67,20 @@ def turn(direction):
     welcome_msg = render_template('welcome')
     return question(welcome_msg)
 
+def dispense_pill():
+    s = socket.socket()
+    s.connect((command.host, PORT))
+
+    for _ in range(6):
+            s.send('go'.encode('utf-8'))
+            print('loop')
+            time.sleep(2)
+
 
 @ask.intent("Dispense")
 def dispense():
     command.dispense_pill()
+    threading.Thread(target=dispense_pill).start()
     dispense_msg = render_template('dispense')
     return question(dispense_msg)
 
