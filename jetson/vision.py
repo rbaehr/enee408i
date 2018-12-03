@@ -38,7 +38,7 @@ class Vision:
 
 
     # returns the name of the person recognized
-    def recognize(self, max_frames=30):
+    def recognize(self, max_frames=15):
         #process_this_frame = True
 
         people = set()

@@ -12,6 +12,8 @@ from forward_back_controller import ForwardBackController
 from command import Command
 from vision import Vision
 
+PORT = 9001
+
 c1 = LeftRightController(300, 0.25)
 c2 = ForwardBackController(40, 0.2)
 command = Command(serial_port='/dev/ttyACM0')
@@ -51,12 +53,18 @@ def chase():
 
 @ask.intent("Forward")
 def forward():
+    command.forward(10)
+    time.sleep(2)
+    command.stop()
     welcome_msg = render_template('welcome')
     return question(welcome_msg)
 
 
 @ask.intent("Backward")
 def backward():
+    command.backward(10)
+    time.sleep(2)
+    command.stop()
     welcome_msg = render_template('welcome')
     return question(welcome_msg)
 
@@ -64,6 +72,14 @@ def backward():
 
 @ask.intent("Turn")
 def turn(direction):
+    d = str(direction).lower()
+    if d == 'left':
+        command.turn_left(5)
+    elif d == 'right':
+        command.turn_right(5)
+
+    time.sleep(1)
+    command.stop()
     welcome_msg = render_template('welcome')
     return question(welcome_msg)
 

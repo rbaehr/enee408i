@@ -62,6 +62,26 @@ class Command:
 
         return dist
 
+    def forward(self, speed):
+        left(speed)
+        right(speed)
+
+
+    def backward(self, speed):
+        left(-speed)
+        right(-speed)
+
+    def turn_left(self, speed):
+        left(-speed)
+        right(speed)
+
+    def turn_right(self, speed):
+        left(speed)
+        right(-speed)
+
+    def stop(self):
+        left(0)
+        right(0)
 
 
     def read_command(self):
