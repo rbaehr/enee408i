@@ -27,7 +27,9 @@ class Command:
 
 
     def dispense_pill(self):
-        self.s.send('go'.encode('utf-8'))
+        for _ in range(6):
+            self.s.send('go'.encode('utf-8'))
+            time.sleep(2)
 
 
     def write_command(self, opcode, operand):
