@@ -1,10 +1,10 @@
-import serial, struct, time, socket
+import serial, struct, time, socket, threading
 
 PORT = 9001
 
 class Command:
 
-    def __init__(self, serial_port='/dev/ttyACM0', baud_rate=9600):
+    def __init__(self, serial_port='/dev/ttyACM0', baud_rate=9600, hostname='../config/hostname'):
         try:
             self.ser = serial.Serial(serial_port, baud_rate)
             self.ser.flushInput()
@@ -18,17 +18,21 @@ class Command:
         self.RIGHT_CCW_CMD = 0x08
         self.PING_CMD = 0xF0
 
-        with open('config/hostname', 'r') as f:
+        with open(hostname, 'r') as f:
             for i in f:
-                hostname = str(i)
-
-        self.s = socket.socket()
-        self.s.connect((hostname, PORT))
+                self.host = str(i)
 
 
     def dispense_pill(self):
+        threading.Thread(target=self._dispense_pill, args=(self.host,)).start()
+
+    def _dispense_pill(self, host):
+        s = socket.socket()
+        s.connect((host, PORT))
+        print('dispensing')
         for _ in range(6):
-            self.s.send('go'.encode('utf-8'))
+            s.send('go'.encode('utf-8'))
+            print('loop')
             time.sleep(2)
 
 
@@ -58,6 +62,26 @@ class Command:
 
         return dist
 
+    def forward(self, speed):
+        self.left(-speed)
+        self.right(-speed)
+
+
+    def backward(self, speed):
+        self.left(speed)
+        self.right(speed)
+
+    def turn_right(self, speed):
+        self.left(-speed)
+        self.right(speed)
+
+    def turn_left(self, speed):
+        self.left(speed)
+        self.right(-speed)
+
+    def stop(self):
+        self.left(0)
+        self.right(0)
 
 
     def read_command(self):

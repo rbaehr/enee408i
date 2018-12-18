@@ -1,6 +1,6 @@
 from collections import deque
 import numpy as np
-#import imutils
+import imutils
 import cv2
 import face_recognition
 import json
@@ -38,7 +38,7 @@ class Vision:
 
 
     # returns the name of the person recognized
-    def recognize(self, max_frames=30):
+    def recognize(self, max_frames=15):
         #process_this_frame = True
 
         people = set()
@@ -87,6 +87,8 @@ class Vision:
         pts_sum = 0
         radi = deque()
         radi_sum = 0
+
+        self.camera = cv2.VideoCapture(self.camera_index)
 
         while True:
             (grabbed, frame) = self.camera.read()
@@ -148,6 +150,8 @@ class Vision:
 
             self.command.left(left)
             self.command.right(right)
+
+        self.camera.release()
 
 
 
